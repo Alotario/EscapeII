@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title>TopSide</title>
-    <style>* { padding: 0; margin: 0; } canvas { background: #e0983e; background-image: url("img/background.png"); display: block; margin: 0 auto; } #output { top: 200; text-align: center; } </style>
+    <style>* { padding: 0; margin: 0; } canvas { background: #000000; background-image: url("img/background.png"); display: block; margin: 0 auto; } #output { top: 200; text-align: center; } </style>
     <script src="js/leap-0.6.4.min.js"></script>
 </head>
 <body bgcolor="black">
@@ -26,6 +26,7 @@
     <img src="img/player/leftstrike.png" width="0" height="0">
     <img src="img/player/upstrike.png" width="0" height="0">
     <img src="img/player/rightstrike.png" width="0" height="0">
+    <img src="img/player/hazardsprite.png" width="0" height="0">
     <img src="img/door.png" width="0" height="0">
     <img src="img/coin.png" width="0" height="0">
     <img src="img/p1.png" width="0" height="0">
@@ -466,7 +467,7 @@
     var slimekilled = false;
     var health = 25;
     var hashammer = false;
-    var hasafekey = true;
+    var hasafekey = false;
 
     var touching1 = false;
     var touching2 = false;
@@ -478,7 +479,7 @@
     var touchinghammer = false;
     var touchingcrate = false;
     var touchingkey = false;
-
+    var touchingsafe = false;
     
 
    function collision() {
@@ -543,6 +544,12 @@
 
             hammerX = 1000000;
             hashammer = true;
+
+        }
+
+        if (touchingsafe == true && hasafekey == true) {
+
+            safeX = 100000;
 
         }
 
@@ -657,6 +664,22 @@
         } else {
 
             touchingcrate = false;
+           
+
+        }
+
+        if (playerX < safeX + safeWidth &&
+        playerX + playerWidth > safeX &&
+        playerY < safeY + safeHeight &&
+        playerY + playerHeight > safeY) {
+
+            //this needs to be sorted into 4 separate checks
+            touchingsafe = true;
+            
+
+        } else {
+
+            touchingsafe = false;
            
 
         }
