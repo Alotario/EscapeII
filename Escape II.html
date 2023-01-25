@@ -1,0 +1,145 @@
+<html>
+    <head>
+
+    </head>
+    <body style="background-color:black;">
+        <img src="app/img/logo.png" id="logo" style="position:fixed;width:608.5;height:205;left:540px;">
+        <img src="app/img/tipspage.gif" id="lilman" width="25%" height="475cm" style="position:fixed;" top="10px" left="10px">
+        <img id="cursor" src="app/img/cursor.gif" style="position:fixed;top:580px;left:775px;top:470;">
+        <button id="start" onmousedown="startDown()" onmouseover="startHover()" onmouseout="startOffHover()" style="font-family:monospace;position:fixed;top:470px;left:810px;color:aquamarine;background-color:black;border-style:none;font-size:20px;">
+        Start
+        </button>
+        <button id="credits" onmousedown="creditsDown()" onmouseover="creditsHover()" onmouseout="creditsOffHover()" style="font-family:monospace;position:fixed;top:510px;left:800px;color:aquamarine;background-color:black;border-style:none;font-size:20px;">
+            Credits
+        </button>
+        <script>
+
+            function startHover() {
+
+                var x = document.getElementById('cursor');
+                var y = document.getElementById('start');
+                x.style.left = 775;
+                x.style.top = 470
+                y.style.color = "#0000FF";
+
+            }
+
+            function creditsHover() {
+
+                var x = document.getElementById('cursor');
+                var y = document.getElementById('credits');
+                x.style.left = 765;
+                x.style.top = 510;
+                y.style.color = "#0000FF";
+
+            }
+
+            function startOffHover() {
+
+                var x = document.getElementById('start');
+                x.style.color = "aquamarine";
+
+            }
+
+            function creditsOffHover() {
+
+                var x = document.getElementById('credits');
+                x.style.color = "aquamarine";
+
+            }
+
+            function startDown() {
+
+                window.location = "extdata.html";
+
+            }
+
+            function creditsDown() {
+
+                window.location = "extdata.html";
+
+            }
+
+        </script>
+        <style>
+
+            
+
+            @keyframes pissbaby_title {
+
+                from {left: 2000}
+                to {left: 540}
+            }
+
+            @keyframes pissbaby_start {
+
+                from {left: 2000}
+                to {left: 810}
+
+            }
+
+            @keyframes pissbaby_credits {
+
+                from {left: 2000}
+                to {left: 800}
+
+            }
+
+            @keyframes pissbaby_cursor {
+
+                from {left: 2000}
+                to {left: 775}
+
+            }
+
+            @keyframes pissbaby_lilman {
+
+                from {left: 2000}
+                to {left: 10}
+
+            }
+
+            #cursor {
+
+                animation-name: pissbaby_cursor;
+                animation-duration: 3s;
+
+            }
+
+            #start {
+
+                animation-name: pissbaby_start;
+                animation-duration: 3s;
+
+            }
+
+            #credits {
+
+                animation-name: pissbaby_credits;
+                animation-duration: 3s;
+
+            }
+
+            #logo {
+
+                animation-name: pissbaby_title;
+                animation-duration: 3s;
+
+            }
+
+            #lilman {
+
+                animation-name: pissbaby_lilman;
+                animation-duration: 3s;
+
+            }
+
+            body {
+
+                overflow: hidden;
+
+            }
+
+        </style>
+    </body>
+</html>

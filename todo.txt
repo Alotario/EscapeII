@@ -1,0 +1,10 @@
+ART TO MAKE:
+
+    -none yet
+
+STUFF TO CODE:
+
+    -lv1
+        -finish logic for items
+        -put in the slimes (remember diagonals go 2 speed, straight goes 3 speed) and write their logic
+        -put in coins

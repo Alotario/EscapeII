@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>TopSide</title>
+    <style>* { padding: 0; margin: 0; } canvas { background: #e0983e; background-image: url("img/background.png"); display: block; margin: 0 auto; } #output { top: 200; text-align: center; } </style>
+    <script src="js/leap-0.6.4.min.js"></script>
+</head>
+<body bgcolor="black">
+    
+    <canvas id="myCanvas" width="960" height="600" style="position:absolute;left:0px;"></canvas>
+
+
+    
+    <img src="img/player/HUD/hud.jpg" style="position:absolute;width:404px;height:116px;left:0px;top:600px;" id="playerhud">
+    <img src="img/player/HUD/down.gif" style="width:72px;height:72px;position:absolute;top:620px;left:164px;">
+    <img src="img/player/down.png" width="0" height="0">
+    <img src="img/player/up.png" width="0" height="0">
+    <img src="img/player/left.png" width="0" height="0">
+    <img src="img/player/right.png" width="0" height="0">
+    <img src="img/player/leftwalk.gif" width="0" height="0">
+    <img src="img/player/rightwalk.gif" width="0" height="0">
+    <img src="img/player/downwalk.gif" width="0" height="0">
+    <img src="img/player/upwalk.gif" width="0" height="0">
+    <img src="img/player/downstrike.png" width="0" height="0">
+    <img src="img/player/leftstrike.png" width="0" height="0">
+    <img src="img/player/upstrike.png" width="0" height="0">
+    <img src="img/player/rightstrike.png" width="0" height="0">
+    <img src="img/door.png" width="0" height="0">
+    <img src="img/coin.png" width="0" height="0">
+    <img src="img/p1.png" width="0" height="0">
+    <img src="img/slime.gif" width="0" height="0">
+    <img src="img/healthpack.png" width="0" height="0">
+    <p1 id="healthamount" style="position:absolute;top:630px;left:15px;color:red;">25</p1>
+<p2 id="feed" style="position:absolute;color:aquamarine;left:280px;top:640px;"></p2>
+<p3 id="coincount" style="position:absolute;color:aquamarine;left:280px;top:685px;"></p3>
+<script>
+    // INIT
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+
+    var hascoin = false;
+    var striking = false;
+
+    var playerHeight = 20;
+    var playerWidth = 16;
+    var playerX = 210;
+    var playerY = (canvas.height - playerHeight) / 2;
+    
+    var objectHeight = canvas.height;
+    var objectWidth = 30;
+    var objectX = 0;
+    var objectY = (canvas.height - objectHeight) / 2;
+    
+    var object2Height = canvas.height;
+    var object2Width = 30;
+    var object2X = 930;
+    var object2Y = (canvas.height - objectHeight) / 2;
+
+    var object3Height = 30;
+    var object3Width = canvas.width;
+    var object3X = 10;
+    var object3Y = (canvas.height - objectHeight) / 2;
+
+    var object4Height = 30;
+    var object4Width = canvas.width;
+    var object4X = 10;
+    var object4Y = 570;
+
+    var doorHeight = 32;
+    var doorWidth = 32;
+    var doorX = 800;
+    var doorY = 300;
+
+    var safeHeight = 32;
+    var safeWidth = 32;
+    var safeX = 500;
+    var safeY = 100;
+
+    var crateX = 400;
+    var crateY = 300;
+    var crateWidth = 32;
+    var crateHeight = 32;
+
+    var keyX = 12122
+    var keyY = 12121
+    var keyWidth = 32
+    var keyHeight = 32
+
+    var hazard1X = 100
+    var hazard1Y = 300
+    var hazard1Width = 62
+    var hazard1Height = 32
+
+    var hazard2X = 100
+    var hazard2Y = 370
+    var hazard2Width = 62
+    var hazard2Height = 32
+
+    var hammerX = 100;
+    var hammerY = 336;
+    var hammerHeight = 32;
+    var hammerWidth = 32;
+
+    var rightPressed = false;
+    var leftPressed = false;
+    var upPressed = false;
+    var downPressed = false;
+
+    var direction = 3;
+    this.x = 0;
+    this.y = 0
+    this.height = 0;
+    this.width = 0;
+    
+    var img = new Image();
+    img.src = "img/player/down.png";
+    img.x = playerX;
+    img.y = playerY;
+    img.width = playerWidth;
+    img.height = playerHeight;
+
+    var hammer = new Image();
+    hammer.src = 'img/hammer.png';
+    hammer.x = hammerX;
+    hammer.y = hammerY;
+    hammer.width = hammerWidth;
+    hammer.height = hammerHeight;
+
+    var object = new Image();
+    object.src = "img/p1.png";
+    object.x = objectX;
+    object.y = objectY;
+    object.width = objectWidth;
+    object.height = objectHeight;
+
+    var object2 = new Image();
+    object2.src = "img/p1.png";
+    object2.x = object2X;
+    object2.y = object2Y;
+    object2.width = object2Width;
+    object2.height = object2Height;
+    
+    var object3 = new Image();
+    object3.src = "img/p1.png";
+    object3.x = object3X;
+    object3.y = object3Y;
+    object3.width = object3Width;
+    object3.height = object3Height;
+
+    var object4 = new Image();
+    object4.src = "img/p1.png";
+    object4.x = object4X;
+    object4.y = object4Y;
+    object4.width = object4Width;
+    object4.height = object4Height;
+
+    var door = new Image();
+    door.src = "img/door.png"
+    door.x = doorX;
+    door.y = doorY;
+    door.width = doorWidth;
+    door.height = doorHeight;
+
+    var safe = new Image();
+    safe.src = "img/safe.png"
+    safe.x = safeX;
+    safe.y = safeY;
+    safe.width = safeWidth;
+    door.height = safeHeight;
+
+    var crate = new Image();
+    crate.src = "img/crate.png"
+    crate.x = crateX;
+    crate.y = crateY;
+    crate.width = crateWidth;
+    crate.height = crateHeight;
+
+    var key = new Image();
+    key.src = "img/miniobjectivekey.png";
+    key.x = keyX;
+    key.y = keyY;
+    key.width = keyWidth;
+    key.height = keyHeight;
+    
+    var hazard1 = new Image();
+    hazard1.src = "img/hazard.png"
+    hazard1.x = hazard1X
+    hazard1.y = hazard1Y
+    hazard1.width = hazard1X
+    hazard1.height = hazard1X
+
+    var hazard2 = new Image();
+    hazard2.src = "img/hazard.png"
+    hazard2.x = hazard2X
+    hazard2.y = hazard2Y
+    hazard2.width = hazard2X
+    hazard2.height = hazard2X
+
+
+    // KEYBOARD
+    document.addEventListener("keydown", keyDownHandler, false);
+    document.addEventListener("keyup", keyUpHandler, false);
+    function keyDownHandler(e) {
+        if ("code" in e) {
+            switch(e.code) {
+                case "Unidentified":
+                    break;
+                case "ArrowRight":
+                case "Right": // IE <= 9 and FF <= 36
+                case "KeyD":
+                    rightPressed = true;
+                    img.src = "img/player/rightwalk.gif"
+                    return;
+                case "ArrowLeft":
+                case "Left": // IE <= 9 and FF <= 36
+                case "KeyA":
+                    leftPressed = true;
+                    img.src = "img/player/leftwalk.gif"
+                    return;
+                case "ArrowUp":
+                case "Up": // IE <= 9 and FF <= 36
+                case "KeyW":
+                    upPressed = true;
+                    img.src = "img/player/upwalk.gif"
+                    return;
+                case "ArrowDown":
+                case "Down": // IE <= 9 and FF <= 36
+                case "KeyS":
+                    downPressed = true;
+                    img.src = "img/player/downwalk.gif"
+                    return;
+                case "Space":
+                    swordStrike();
+                default:
+                    return;
+            }
+        }
+
+        if(e.keyCode == 39) {
+            rightPressed = true;
+        }
+        else if(e.keyCode == 37) {
+            leftPressed = true;
+        }
+        if(e.keyCode == 40) {
+            downPressed = true;
+        }
+        else if(e.keyCode == 38) {
+            upPressed = true;
+        }
+    }
+    function keyUpHandler(e) {
+        if ("code" in e) {
+            switch(e.code) {
+                case "Unidentified":
+                    break;
+                case "ArrowRight":
+                case "Right": // IE <= 9 and FF <= 36
+                case "KeyD":
+                    rightPressed = false;
+                    img.src = "img/player/right.png"
+                    direction = 1;
+                    return;
+                case "ArrowLeft":
+                case "Left": // IE <= 9 and FF <= 36
+                case "KeyA":
+                    leftPressed = false;
+                    img.src = "img/player/left.png"
+                    direction = 2;
+                    return;
+                case "ArrowUp":
+                case "Up": // IE <= 9 and FF <= 36
+                case "KeyW":
+                    upPressed = false;
+                    img.src = "img/player/up.png"
+                    direction = 4;
+                    return;
+                case "ArrowDown":
+                case "Down": // IE <= 9 and FF <= 36
+                case "KeyS":
+                    downPressed = false;
+                    img.src = "img/player/down.png"
+                    direction = 3;
+                    return;
+                default:
+                    return;
+            }
+        }
+
+        if(e.keyCode == 39) {
+            rightPressed = false;
+           
+        }
+        else if(e.keyCode == 37) {
+            leftPressed = false;
+            
+        }
+        if(e.keyCode == 40) {
+            downPressed = false;
+            
+        }
+        else if(e.keyCode == 38) {
+            upPressed = false;
+            
+        }
+    }
+
+    
+    
+
+    function swordStrike() {
+
+        if (direction == 3) {
+
+            img.src = URL = "img/player/downstrike.png";
+            playerHeight += 10;
+            striking = true;
+            setTimeout(function() {
+
+                img.src = URL = "img/player/down.png";
+                playerHeight -= 10;
+                striking = false;
+
+            }, 200)
+
+        } else if (direction == 4) {
+
+            img.src = URL = "img/player/upstrike.png";
+            playerY -= 10;
+            playerHeight += 10;
+            striking = true;
+            setTimeout(function() {
+
+                img.src = URL = "img/player/up.png";
+                playerY += 10;
+                playerHeight -= 10;
+                striking = false;
+
+            }, 200)
+
+        } else if (direction == 2) {
+
+            img.src = URL = "img/player/leftstrike.png";
+            playerX -= 10;
+            playerWidth += 10;
+            striking = true;
+            setTimeout(function() {
+
+                img.src = URL = "img/player/left.png";
+                playerX += 10;
+                playerWidth -= 10;
+                striking = false;
+
+            }, 200)
+
+        } else if (direction == 1) {
+
+            img.src = URL = "img/player/rightstrike.png";
+            playerWidth += 13;
+            striking = true;
+            setTimeout(function() {
+
+                img.src = URL = "img/player/right.png";
+                playerWidth -= 13;
+                striking = false;
+                
+
+            }, 200)
+
+        }
+
+    }
+
+    // DRAW
+    function draw() {
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(playerX, playerY, playerWidth, playerHeight)
+        ctx.fillRect(objectX, objectY, objectWidth, objectHeight)
+        ctx.fillRect(object2X, object2Y, object2Width, object2Height)
+        ctx.fillRect(object3X, object3Y, object3Width, object3Height)
+        ctx.fillRect(object4X, object4Y, object4Width, object4Height)
+        
+        ctx.fillRect(hazard1X, hazard1Y, hazard1Width, hazard1Height)
+        ctx.fillRect(hazard2X, hazard2Y, hazard2Width, hazard2Height)
+
+        
+        // KEYBOARD
+        if(rightPressed) {
+            playerX += 3;
+        }
+        else if(leftPressed) {
+            playerX -= 3;
+        }
+        if(downPressed) {
+            playerY += 3;
+        }
+        else if(upPressed) {
+            playerY -= 3;
+        }
+
+        // GAMEPAD
+        /*
+        gamepadUpdateHandler();
+        if(gamepadButtonPressedHandler(0)) {
+            playerY -= 3;
+        }
+        else if(gamepadButtonPressedHandler(1)) {
+            playerY += 3;
+        }
+        if(gamepadButtonPressedHandler(2)) {
+            playerX -= 3;
+        }
+        else if(gamepadButtonPressedHandler(3)) {
+            playerX += 3;
+        }
+        if(gamepadButtonPressedHandler(11)) {
+            alert('BOOM!');
+        }
+        */
+
+        // LEAP MOTION
+        /*
+        if(horizontalDegree > degreeThreshold) {
+            playerX -= 3;
+        }
+        else if(horizontalDegree < -degreeThreshold) {
+            playerX += 3;
+        }
+        if(verticalDegree > degreeThreshold) {
+            playerY += 3;
+        }
+        else if(verticalDegree < -degreeThreshold) {
+            playerY -= 3;
+        }
+        if(grabStrength == 1) {
+            alert('BOOM!');
+        }
+        */
+
+        
+
+        
+        ctx.drawImage(object, objectX, objectY);
+        ctx.drawImage(object2, object2X, object2Y);
+        ctx.drawImage(object3, object3X, object3Y);
+        ctx.drawImage(object4, object4X, object4Y);
+        ctx.drawImage(door, doorX, doorY);
+        ctx.drawImage(safe, safeX, safeY);
+        ctx.drawImage(hazard1, hazard1X, hazard1Y);
+        ctx.drawImage(hazard2, hazard2X, hazard2Y);
+        ctx.drawImage(hammer, hammerX, hammerY);
+        ctx.drawImage(crate, crateX, crateY);
+        ctx.drawImage(key, keyX, keyY)
+        ctx.drawImage(img, playerX, playerY);
+        requestAnimationFrame(draw);
+        
+        requestAnimationFrame(collision);
+        requestAnimationFrame(collision);
+        //there's two checks here to make the collision smoother. don't like it? eat shit, find a better way
+
+
+    }
+
+    var slimekilled = false;
+    var health = 25;
+    var hashammer = false;
+    var hasafekey = true;
+
+    var touching1 = false;
+    var touching2 = false;
+    var touching3 = false;
+    var touching4 = false;
+    var touchingdoor = false;
+    var touchinghazard1 = false;
+    var touchinghazard2 = false;
+    var touchinghammer = false;
+    var touchingcrate = false;
+    var touchingkey = false;
+
+    
+
+   function collision() {
+
+    if (health <= 0) {
+
+        window.location = 'lv2.html';
+
+    }
+        
+
+    
+    var j = document.getElementById('feed')
+    var k = document.getElementById('coincount')
+    var g = document.getElementById('healthamount')
+    g.innerHTML = Math.round(health);
+
+        
+
+        if (touching1 == true) {  
+
+                playerX = objectX + objectWidth;
+
+        }
+
+        if (touching2 == true) {  
+
+                playerX = object2X - object2Width + 12;
+
+        }
+
+        if (touching3 == true) {  
+
+                playerY = object3Y + object3Height;
+
+        }
+
+        if (touching4 == true) {  
+
+                playerY = object4Y - object4Height + 10;
+
+        }
+
+        if (touchingdoor == true) {
+
+            if (hascoin == true && slimekilled == true) {
+
+                window.location = URL = "test.html"
+
+            } else {
+
+                null
+
+            }
+
+            
+            
+
+        }
+
+        if (touchinghammer == true) {
+
+            hammerX = 1000000;
+            hashammer = true;
+
+        }
+
+        if (touchingcrate == true && striking == true && hashammer == true) {
+
+            keyX = crateX + 40;
+            keyY = crateY - 40;
+            crateX = 100000;
+
+        }
+
+        if (touchingkey == true) {
+
+            keyX = 100000
+            hasafekey = true;
+
+        }
+
+    if (playerX < objectX + objectWidth &&
+        playerX + playerWidth > objectX &&
+        playerY < objectY + objectHeight &&
+        playerY + playerHeight > objectY) {
+
+            //this needs to be sorted into 4 separate checks
+            touching1 = true;
+            //left
+
+        } else {
+
+            touching1 = false;
+            
+
+        }
+
+        if (playerX < object2X + object2Width &&
+        playerX + playerWidth > object2X &&
+        playerY < object2Y + object2Height &&
+        playerY + playerHeight > object2Y) {
+
+            //this needs to be sorted into 4 separate checks
+            touching2 = true;
+            //right
+            
+
+        } else {
+
+            touching2 = false;
+            
+
+        }
+
+        if (playerX < object3X + object3Width &&
+        playerX + playerWidth > object3X &&
+        playerY < object3Y + object3Height &&
+        playerY + playerHeight > object3Y) {
+
+            //this needs to be sorted into 4 separate checks
+            touching3 = true;
+            //top
+            
+
+        } else {
+
+            touching3 = false;
+            
+            
+
+        }
+
+        if (playerX < object4X + object4Width &&
+        playerX + playerWidth > object4X &&
+        playerY < object4Y + object4Height &&
+        playerY + playerHeight > object4Y) {
+
+            //this needs to be sorted into 4 separate checks
+            touching4 = true;
+            //bottom
+            
+
+        } else {
+
+            touching4 = false;
+           
+
+        }
+
+        if (playerX < hammerX + hammerWidth &&
+        playerX + playerWidth > hammerX &&
+        playerY < hammerY + hammerHeight &&
+        playerY + playerHeight > hammerY) {
+
+            //this needs to be sorted into 4 separate checks
+            touchinghammer = true;
+            
+
+        } else {
+
+            touchinghammer = false;
+           
+
+        }
+
+        if (playerX < crateX + crateWidth &&
+        playerX + playerWidth > crateX &&
+        playerY < crateY + crateHeight &&
+        playerY + playerHeight > crateY) {
+
+            //this needs to be sorted into 4 separate checks
+            touchingcrate = true;
+            
+
+        } else {
+
+            touchingcrate = false;
+           
+
+        }
+
+        if (playerX < keyX + keyWidth &&
+        playerX + playerWidth > keyX &&
+        playerY < keyY + keyHeight &&
+        playerY + playerHeight > keyY) {
+
+            //this needs to be sorted into 4 separate checks
+            touchingkey = true;
+            
+
+        } else {
+
+            touchingkey = false;
+           
+
+        }
+
+        if (playerX < hazard1X + hazard1Width &&
+        playerX + playerWidth > hazard1X &&
+        playerY < hazard1Y + hazard1Height &&
+        playerY + playerHeight > hazard1Y) {
+
+            //this needs to be sorted into 4 separate checks
+            touchinghazard1 = true;
+            img.src = 'img/hazardsprite.png';
+            health -= 0.1;
+            g.innerHTML = Math.round(health);
+            //bottom
+            
+
+        } else {
+
+            touchinghazard1 = false;
+           
+
+        }
+
+        if (playerX < hazard2X + hazard2Width &&
+        playerX + playerWidth > hazard2X &&
+        playerY < hazard2Y + hazard2Height &&
+        playerY + playerHeight > hazard2Y) {
+
+            //this needs to be sorted into 4 separate checks
+            touchinghazard2 = true;
+            img.src = 'img/hazardsprite.png';
+            health -= 0.1;
+            g.innerHTML = Math.round(health);
+            //bottom
+            
+
+        } else {
+
+            touchinghazard2 = false;
+           
+
+        }
+
+        if (playerX < doorX + doorWidth &&
+        playerX + playerWidth > doorX &&
+        playerY < doorY + doorHeight &&
+        playerY + playerHeight > doorY) {
+
+            //this needs to be sorted into 4 separate checks
+            touchingdoor = true;
+            
+
+        } else {
+
+            touchingdoor = false;
+           
+
+        }
+
+        
+
+        
+
+    }
+
+    
+
+draw();
+</script>
+<div id="output"></div>
+
+</body>
+</html>

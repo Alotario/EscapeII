@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>TopSide</title>
+    <style>* { padding: 0; margin: 0; } canvas { background: #e0983e; background-image: url("img/background.png"); display: block; margin: 0 auto; } #output { top: 200; text-align: center; } </style>
+    <script src="js/leap-0.6.4.min.js"></script>
+</head>
+<body bgcolor="black">
+    
+    <canvas id="myCanvas" width="960" height="600" style="position:absolute;left:0px;"></canvas>
+
+
+
+<img src="img/player/HUD/hud.jpg" style="position:absolute;width:404px;height:116px;left:0px;top:600px;" id="playerhud">
+<img src="img/player/HUD/down.gif" style="width:72px;height:72px;position:absolute;top:620px;left:164px;">
+<img src="img/player/down.png" width="0" height="0">
+<img src="img/player/up.png" width="0" height="0">
+<img src="img/player/left.png" width="0" height="0">
+<img src="img/player/right.png" width="0" height="0">
+<img src="img/player/leftwalk.gif" width="0" height="0">
+<img src="img/player/rightwalk.gif" width="0" height="0">
+<img src="img/player/downwalk.gif" width="0" height="0">
+<img src="img/player/upwalk.gif" width="0" height="0">
+<img src="img/player/downstrike.png" width="0" height="0">
+<img src="img/player/leftstrike.png" width="0" height="0">
+<img src="img/player/upstrike.png" width="0" height="0">
+<img src="img/player/rightstrike.png" width="0" height="0">
+<img src="img/door.png" width="0" height="0">
+<img src="img/coin.png" width="0" height="0">
+<img src="img/p1.png" width="0" height="0">
+<img src="img/slime.gif" width="0" height="0">
+<img src="img/healthpack.png" width="0" height="0">
+<p1 id="healthamount" style="position:absolute;top:630px;left:15px;color:red;">25</p1>
+<p2 id="feed" style="position:absolute;color:aquamarine;left:280px;top:640px;"></p2>
+<p3 id="coincount" style="position:absolute;color:aquamarine;left:280px;top:685px;"></p3>
+<script>
+    // INIT
+    // senior developers, i beg of you, PLEASE, PLEASE don't laugh
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+
+    var hascoin = false;
+    var striking = false;
+
+    var playerHeight = 20;
+    var playerWidth = 16;
+    var playerX = 410;
+    var playerY = 105;
+    
+    var objectHeight = canvas.height;
+    var objectWidth = 30;
+    var objectX = 0;
+    var objectY = (canvas.height - objectHeight) / 2;
+    
+    var object2Height = canvas.height;
+    var object2Width = 30;
+    var object2X = 930;
+    var object2Y = (canvas.height - objectHeight) / 2;
+
+    var object3Height = 30;
+    var object3Width = canvas.width;
+    var object3X = 10;
+    var object3Y = (canvas.height - objectHeight) / 2;
+
+    var object4Height = 30;
+    var object4Width = canvas.width;
+    var object4X = 10;
+    var object4Y = 570;
+
+    var slimeX = 310;
+    var slimeY = 320;
+    var slimeHeight = 14;
+    var slimeWidth = 28;
+
+    var slime1X = 310;
+    var slime1Y = 320;
+    var slime1Height = 14;
+    var slime1Width = 28;
+
+    var slime2X = 550;
+    var slime2Y = 320;
+    var slime2Height = 14;
+    var slime2Width = 28;
+
+    var doorHeight = 32;
+    var doorWidth = 32;
+    var doorX = 375;
+    var doorY = 100;
+
+    var crateHeight = 32;
+    var crateWidth = 32;
+    var crateX = 600;
+    var crateY = 450;
+
+    var safekHeight = 24;
+    var safekWidth = 24;
+    var safekX = 100;
+    var safekY = 200;
+
+    var safeHeight = 32;
+    var safeWidth = 32;
+    var safeX = 700;
+    var safeY = 120;
+
+    var hammerX = 100000;
+    var hammerY = 100000;
+    var hammerHeight = 32;
+    var hammerWidth = 32;
+
+    var keyX = 100000;
+    var keyY = 100000;
+    var keyHeight = 32;
+    var keyWidth = 32;
+
+    var coinX = 510
+    var coinY = 400
+    var coinWidth = 32
+    var coinHeight = 32
+
+    var coin1X = 210
+    var coin1Y = 100
+    var coin1Width = 32
+    var coin1Height = 32
+
+    var coin2X = 710
+    var coin2Y = 275
+    var coin2Width = 32
+    var coin2Height = 32
+
+    var rightPressed = false;
+    var leftPressed = false;
+    var upPressed = false;
+    var downPressed = false;
+
+    var direction = 3;
+    this.x = 0;
+    this.y = 0
+    this.height = 0;
+    this.width = 0;
+    
+    var img = new Image();
+    img.src = "img/player/down.png";
+    img.x = playerX;
+    img.y = playerY;
+    img.width = playerWidth;
+    img.height = playerHeight;
+
+    var object = new Image();
+    object.src = "img/p1.png";
+    object.x = objectX;
+    object.y = objectY;
+    object.width = objectWidth;
+    object.height = objectHeight;
+
+    var slime = new Image();
+    slime.src = "img/slimebox.png";
+    slime.x = slimeX;
+    slime.y = slimeY;
+    slime.width = slimeWidth;
+    slime.height = slimeHeight;
+
+    var slime1 = new Image();
+    slime1.src = "img/slimebox.png";
+    slime1.x = slime1X;
+    slime1.y = slime1Y;
+    slime1.width = slime1Width;
+    slime1.height = slime1Height;
+
+    var slime2 = new Image();
+    slime2.src = "img/slimebox.png";
+    slime2.x = slime2X;
+    slime2.y = slime2Y;
+    slime2.width = slime2Width;
+    slime2.height = slime2Height;
+
+    var coin = new Image();
+    coin.src = "img/coin.png";
+    coin.x = coinX;
+    coin.y = coinY;
+    coin.width = coinWidth;
+    coin.height = coinHeight;
+
+    var coin1 = new Image();
+    coin1.src = "img/coin.png";
+    coin1.x = coin1X;
+    coin1.y = coin1Y;
+    coin1.width = coin1Width;
+    coin1.height = coin1Height;
+
+    var coin2 = new Image();
+    coin2.src = "img/coin.png";
+    coin2.x = coin2X;
+    coin2.y = coin2Y;
+    coin2.width = coin2Width;
+    coin2.height = coin2Height;
+
+    var object2 = new Image();
+    object2.src = "img/p1.png";
+    object2.x = object2X;
+    object2.y = object2Y;
+    object2.width = object2Width;
+    object2.height = object2Height;
+    
+    var object3 = new Image();
+    object3.src = "img/p1.png";
+    object3.x = object3X;
+    object3.y = object3Y;
+    object3.width = object3Width;
+    object3.height = object3Height;
+
+    var object4 = new Image();
+    object4.src = "img/p1.png";
+    object4.x = object4X;
+    object4.y = object4Y;
+    object4.width = object4Width;
+    object4.height = object4Height;
+
+    var door = new Image();
+    door.src = "img/door.png"
+    door.x = doorX;
+    door.y = doorY;
+    door.width = doorWidth;
+    door.height = doorHeight;
+
+    var crate = new Image();
+    crate.src = 'img/crate.png'
+    crate.x = crateX;
+    crate.y = crateY;
+    crate.width = crateWidth;
+    crate.height = crateHeight;
+
+    var safek = new Image();
+    safek.src = 'img/miniobjectivekey.png';
+    safek.x = safekX;
+    safek.y = safekY;
+    safek.width = safekWidth;
+    safek.height = safekHeight;
+
+    var safe = new Image();
+    safe.src = 'img/safe.png'
+    safe.x = safeX;
+    safe.y = safeY;
+    safe.width = safeWidth;
+    safe.height = safeHeight;
+
+    var hammer = new Image();
+    hammer.src = 'img/hammer.png';
+    hammer.x = hammerX;
+    hammer.y = hammerY;
+    hammer.width = hammerWidth;
+    hammer.height = hammerHeight;
+
+    var key = new Image();
+    key.src = 'img/masterkey.png';
+    key.x = keyX;
+    key.y = keyY;
+    key.width = keyWidth;
+    key.height = keyHeight;
+    
+
+
+    // KEYBOARD
+    document.addEventListener("keydown", keyDownHandler, false);
+    document.addEventListener("keyup", keyUpHandler, false);
+    function keyDownHandler(e) {
+        if ("code" in e) {
+            switch(e.code) {
+                case "Unidentified":
+                    break;
+                case "ArrowRight":
+                case "Right": // IE <= 9 and FF <= 36
+                case "KeyD":
+                    rightPressed = true;
+                    img.src = "img/player/rightwalk.gif"
+                    return;
+                case "ArrowLeft":
+                case "Left": // IE <= 9 and FF <= 36
+                case "KeyA":
+                    leftPressed = true;
+                    img.src = "img/player/leftwalk.gif"
+                    return;
+                case "ArrowUp":
+                case "Up": // IE <= 9 and FF <= 36
+                case "KeyW":
+                    upPressed = true;
+                    img.src = "img/player/upwalk.gif"
+                    return;
+                case "ArrowDown":
+                case "Down": // IE <= 9 and FF <= 36
+                case "KeyS":
+                    downPressed = true;
+                    img.src = "img/player/downwalk.gif"
+                    return;
+                case "Space":
+                    swordStrike();
+                default:
+                    return;
+            }
+        }
+
+        if(e.keyCode == 39) {
+            rightPressed = true;
+        }
+        else if(e.keyCode == 37) {
+            leftPressed = true;
+        }
+        if(e.keyCode == 40) {
+            downPressed = true;
+        }
+        else if(e.keyCode == 38) {
+            upPressed = true;
+        }
+    }
+    function keyUpHandler(e) {
+        if ("code" in e) {
+            switch(e.code) {
+                case "Unidentified":
+                    break;
+                case "ArrowRight":
+                case "Right": // IE <= 9 and FF <= 36
+                case "KeyD":
+                    rightPressed = false;
+                    img.src = "img/player/right.png"
+                    direction = 1;
+                    return;
+                case "ArrowLeft":
+                case "Left": // IE <= 9 and FF <= 36
+                case "KeyA":
+                    leftPressed = false;
+                    img.src = "img/player/left.png"
+                    direction = 2;
+                    return;
+                case "ArrowUp":
+                case "Up": // IE <= 9 and FF <= 36
+                case "KeyW":
+                    upPressed = false;
+                    img.src = "img/player/up.png"
+                    direction = 4;
+                    return;
+                case "ArrowDown":
+                case "Down": // IE <= 9 and FF <= 36
+                case "KeyS":
+                    downPressed = false;
+                    img.src = "img/player/down.png"
+                    direction = 3;
+                    return;
+                default:
+                    return;
+            }
+        }
+
+        if(e.keyCode == 39) {
+            rightPressed = false;
+           
+        }
+        else if(e.keyCode == 37) {
+            leftPressed = false;
+            
+        }
+        if(e.keyCode == 40) {
+            downPressed = false;
+            
+        }
+        else if(e.keyCode == 38) {
+            upPressed = false;
+            
+        }
+    }
+
+    
+    
+
+    function swordStrike() {
+
+        if (direction == 3) {
+
+            img.src = URL = "img/player/downstrike.png";
+            playerHeight += 10;
+            striking = true;
+            setTimeout(function() {
+
+                img.src = URL = "img/player/down.png";
+                playerHeight -= 10;
+                striking = false;
+
+            }, 200)
+
+        } else if (direction == 4) {
+
+            img.src = URL = "img/player/upstrike.png";
+            playerY -= 10;
+            playerHeight += 10;
+            striking = true;
+            setTimeout(function() {
+
+                img.src = URL = "img/player/up.png";
+                playerY += 10;
+                playerHeight -= 10;
+                striking = false;
+
+            }, 200)
+
+        } else if (direction == 2) {
+
+            img.src = URL = "img/player/leftstrike.png";
+            playerX -= 10;
+            playerWidth += 10;
+            striking = true;
+            setTimeout(function() {
+
+                img.src = URL = "img/player/left.png";
+                playerX += 10;
+                playerWidth -= 10;
+                striking = false;
+
+            }, 200)
+
+        } else if (direction == 1) {
+
+            img.src = URL = "img/player/rightstrike.png";
+            playerWidth += 13;
+            striking = true;
+            setTimeout(function() {
+
+                img.src = URL = "img/player/right.png";
+                playerWidth -= 13;
+                striking = false;
+                
+
+            }, 200)
+
+        }
+
+    }
+
+    // DRAW
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(playerX, playerY, playerWidth, playerHeight)
+        ctx.fillRect(objectX, objectY, objectWidth, objectHeight)
+        ctx.fillRect(object2X, object2Y, object2Width, object2Height)
+        ctx.fillRect(object3X, object3Y, object3Width, object3Height)
+        ctx.fillRect(object4X, object4Y, object4Width, object4Height)
+        
+        // KEYBOARD
+        if(rightPressed) {
+            playerX += 3;
+        }
+        else if(leftPressed) {
+            playerX -= 3;
+        }
+        if(downPressed) {
+            playerY += 3;
+        }
+        else if(upPressed) {
+            playerY -= 3;
+        }
+
+        // GAMEPAD
+        /*
+        gamepadUpdateHandler();
+        if(gamepadButtonPressedHandler(0)) {
+            playerY -= 3;
+        }
+        else if(gamepadButtonPressedHandler(1)) {
+            playerY += 3;
+        }
+        if(gamepadButtonPressedHandler(2)) {
+            playerX -= 3;
+        }
+        else if(gamepadButtonPressedHandler(3)) {
+            playerX += 3;
+        }
+        if(gamepadButtonPressedHandler(11)) {
+            alert('BOOM!');
+        }
+        */
+
+        // LEAP MOTION
+        /*
+        if(horizontalDegree > degreeThreshold) {
+            playerX -= 3;
+        }
+        else if(horizontalDegree < -degreeThreshold) {
+            playerX += 3;
+        }
+        if(verticalDegree > degreeThreshold) {
+            playerY += 3;
+        }
+        else if(verticalDegree < -degreeThreshold) {
+            playerY -= 3;
+        }
+        if(grabStrength == 1) {
+            alert('BOOM!');
+        }
+        */
+
+        
+
+        ctx.drawImage(img, playerX, playerY);
+        ctx.drawImage(object, objectX, objectY);
+        ctx.drawImage(object2, object2X, object2Y);
+        ctx.drawImage(object3, object3X, object3Y);
+        ctx.drawImage(object4, object4X, object4Y);
+        ctx.drawImage(door, doorX, doorY);
+        ctx.drawImage(crate, crateX, crateY);
+        ctx.drawImage(safek, safekX, safekY);
+        ctx.drawImage(safe, safeX, safeY)
+        ctx.drawImage(hammer, hammerX, hammerY)
+        ctx.drawImage(key, keyX, keyY)
+        ctx.drawImage(slime, slimeX, slimeY)
+        ctx.drawImage(slime1, slime1X, slime1Y)
+        ctx.drawImage(slime2, slime2X, slime2Y)
+        ctx.drawImage(coin, coinX, coinY)
+        ctx.drawImage(coin1, coin1X, coin1Y)
+        ctx.drawImage(coin2, coin2X, coin2Y)
+        requestAnimationFrame(draw);
+        requestAnimationFrame(healthCheck);
+        
+        requestAnimationFrame(collision);
+        requestAnimationFrame(collision);
+        //there's two checks here to make the collision smoother. don't like it? eat shit, find a better way
+
+
+    }
+
+    var health = 25;
+    var hasafekey = false;
+    var safeunlocked = false;
+    var hashammer = false;
+    var hasfinalkey = false;
+    var coinsamount = 0;
+
+
+    var touching1 = false;
+    var touching2 = false;
+    var touching3 = false;
+    var touching4 = false;
+    var touchingdoor = false;
+    var touchingsafekey = false;
+    var touchingsafe = false;
+    var touchinghammer = false;
+    var touchingcrate = false;
+    var touchingkey = false;
+    var touchingcoin = false;
+    var touching1coin = false;
+    var touching2coin = false;
+
+    var slimetouchingleft = false;
+    var slimetouchingright = false;
+    var killingslime = false;
+    var touchingslime = false;
+    var slimekilled = false;
+    var slimedirection = 1;
+
+    var slime1touchingleft = false;
+    var slime1touchingbottom = false;
+    var killing1slime = false;
+    var touching1slime = false;
+    var slime1killed = false;
+    var slime1direction = 1;
+
+    var slime2touchingtop = false;
+    var slime2touchingbottom = false;
+    var killing2slime = false;
+    var touching2slime = false;
+    var slime2killed = false;
+    var slime2direction = 1;
+
+function healthCheck() {
+
+    if (health <= 0) {
+
+        window.location = 'lv1.html';
+
+    } else {
+
+        null
+
+    }
+
+}
+
+   function collision() {
+
+    
+    var j = document.getElementById('feed')
+    var k = document.getElementById('coincount')
+    var g = document.getElementById('healthamount')
+
+        
+
+        if (touching1 == true) {  
+
+                playerX = objectX + objectWidth;
+
+        }
+
+        if (touchingsafekey == true) {
+
+            safekX = 10000000;
+            hasafekey = true;
+            j.innerHTML = j.innerHTML + "<img src='img/miniobjectivekey.png' width='24' height='24'>"
+            
+        }
+
+        if (touching2 == true) {  
+
+                playerX = object2X - object2Width + 12;
+
+        }
+
+        if (touching3 == true) {  
+
+                playerY = object3Y + object3Height;
+
+        }
+
+        if (touching4 == true) {  
+
+                playerY = object4Y - object4Height + 10;
+
+        }
+
+        if (touchingdoor == true) {
+
+            if (hasfinalkey == true) {
+
+                window.location = URL = "test.html"
+
+            } else {null}
+
+            
+            
+
+        }
+
+        if (touchingsafe == true && hasafekey == true) {
+
+            hammerX = safeX;
+            hammerY = safeY - 40;
+            
+            safeX = 1000000;
+            safeunlocked = true;
+            
+
+        } else {null}
+
+
+        if (touchinghammer == true && safeunlocked == true) {
+
+            hashammer = true;
+            hammerX = 100000;
+            j.innerHTML = j.innerHTML + "<img src='img/hammer.png' width='24' height='24'>"
+
+        } else {null}
+
+        if (touchingcrate == true && hashammer == true && striking == true) {
+
+            keyX = crateX + 30
+            keyY = crateY - 30
+            crateX = 1000000;
+            
+
+        } else {null}
+
+        if (touchingkey == true && hashammer == true) {
+
+            keyX = 1000000;
+            hasfinalkey = true;
+            j.innerHTML = j.innerHTML + "<img src='img/masterkey.png' width='24' height='24'>"
+
+        } else {null}
+
+
+    if (slimedirection == 1 && killingslime == false) {
+
+        slimeX += 3;
+
+    }
+
+    if (slimedirection == 2 && killingslime == false) {
+
+        slimeX -= 3;
+
+    }
+
+    if (slime1direction == 1 && killing1slime == false) {
+
+        slime1X += 3;
+        slime1Y += 3;
+
+    }
+
+    if (slime1direction == 2 && killing1slime == false) {
+
+        slime1X -= 3;
+        slime1Y -= 3;
+
+    }
+
+    if (slime2direction == 1 && killing2slime == false) {
+
+        slime2X -= 3;
+        slime2Y += 3;
+
+    }
+
+    if (slime2direction == 2 && killing2slime == false) {
+
+        slime2X += 3;
+        slime2Y -= 3;
+
+    }
+
+
+        if (touchingslime == true) {
+
+            if (striking == true) {
+
+                killingslime = true;
+                slime.src = URL = "img/enemydeath.gif";
+                
+                setTimeout(function() {
+
+                    slime.src = URL = "img/p1.png";
+                    slimeX = 100000000;
+                    slimekilled = true;
+                    
+
+                }, 200)
+
+            } else if  (striking == false) {
+
+                    health -= 1;
+                    g.innerHTML = health;
+                    playerX -= 12;  
+
+            }
+
+        }
+
+        if (touching1slime == true) {
+
+            if (striking == true) {
+
+                killing1slime = true;
+                slime1.src = URL = "img/enemydeath.gif";
+                
+                setTimeout(function() {
+
+                    slime1.src = URL = "img/p1.png";
+                    slime1X = 100000000;
+                    slime1killed = true;
+                    
+
+                }, 200)
+
+            } else if  (striking == false) {
+
+                    health -= 1;
+                    g.innerHTML = health;
+                    playerX -= 12;  
+
+            }
+
+        }
+
+        if (touching2slime == true) {
+
+            if (striking == true) {
+
+                killing2slime = true;
+                slime2.src = URL = "img/enemydeath.gif";
+                
+                setTimeout(function() {
+
+                    slime2.src = URL = "img/p1.png";
+                    slime2X = 100000000;
+                    slime2killed = true;
+                    
+
+                }, 200)
+
+            } else if  (striking == false) {
+
+                    health -= 1;
+                    g.innerHTML = health;
+                    playerX -= 12;  
+
+            }
+
+        }
+
+    if (touchingcoin == true) {
+
+        coinX = 100000;
+        coinsamount += 1
+        k.innerHTML = "<img src='img/coin.png' width='24' height='24'> x" + coinsamount
+
+    }
+
+    if (touching1coin == true) {
+
+        coin1X = 100000;
+        coinsamount += 1
+        k.innerHTML = "<img src='img/coin.png' width='24' height='24'> x" + coinsamount
+
+    }
+
+    if (touching2coin == true) {
+
+        coin2X = 100000;
+        coinsamount += 1
+        k.innerHTML = "<img src='img/coin.png' width='24' height='24'> x" + coinsamount
+
+    }
+
+    if (playerX < objectX + objectWidth &&
+        playerX + playerWidth > objectX &&
+        playerY < objectY + objectHeight &&
+        playerY + playerHeight > objectY) {
+
+            //this needs to be sorted into 4 separate checks
+            touching1 = true;
+            //left
+
+        } else {
+
+            touching1 = false;
+            
+
+        }
+
+        if (playerX < object2X + object2Width &&
+        playerX + playerWidth > object2X &&
+        playerY < object2Y + object2Height &&
+        playerY + playerHeight > object2Y) {
+
+            //this needs to be sorted into 4 separate checks
+            touching2 = true;
+            //right
+            
+
+        } else {
+
+            touching2 = false;
+            
+
+        }
+
+        if (playerX < object3X + object3Width &&
+        playerX + playerWidth > object3X &&
+        playerY < object3Y + object3Height &&
+        playerY + playerHeight > object3Y) {
+
+            //this needs to be sorted into 4 separate checks
+            touching3 = true;
+            //top
+            
+
+        } else {
+
+            touching3 = false;
+            
+            
+
+        }
+
+        if (playerX < object4X + object4Width &&
+        playerX + playerWidth > object4X &&
+        playerY < object4Y + object4Height &&
+        playerY + playerHeight > object4Y) {
+
+            //this needs to be sorted into 4 separate checks
+            touching4 = true;
+            //bottom
+            
+
+        } else {
+
+            touching4 = false;
+           
+
+        }
+
+        if (playerX < doorX + doorWidth &&
+        playerX + playerWidth > doorX &&
+        playerY < doorY + doorHeight &&
+        playerY + playerHeight > doorY) {
+
+            //this needs to be sorted into 4 separate checks
+            touchingdoor = true;
+            
+
+        } else {
+
+            touchingdoor = false;
+           
+
+        }
+
+        if (playerX < safekX + safekWidth &&
+        playerX + playerWidth > safekX &&
+        playerY < safekY + safekHeight &&
+        playerY + playerHeight > safekY) {
+
+            //this needs to be sorted into 4 separate checks
+            touchingsafekey = true;
+            
+
+        } else {
+
+            touchingsafekey = false;
+           
+
+        }
+
+        if (playerX < safeX + safeWidth &&
+        playerX + playerWidth > safeX &&
+        playerY < safeY + safeHeight &&
+        playerY + playerHeight > safeY) {
+
+            //this needs to be sorted into 4 separate checks
+            touchingsafe = true;
+            
+
+        } else {
+
+            touchingsafe = false;
+           
+
+        }
+
+        if (playerX < hammerX + hammerWidth &&
+        playerX + playerWidth > hammerX &&
+        playerY < hammerY + hammerHeight &&
+        playerY + playerHeight > hammerY) {
+
+            //this needs to be sorted into 4 separate checks
+            touchinghammer = true;
+            
+
+        } else {
+
+            touchinghammer = false;
+           
+
+        }
+
+        if (playerX < crateX + crateWidth &&
+        playerX + playerWidth > crateX &&
+        playerY < crateY + crateHeight &&
+        playerY + playerHeight > crateY) {
+
+            //this needs to be sorted into 4 separate checks
+            touchingcrate = true;
+            
+
+        } else {
+
+            touchingcrate = false;
+           
+
+        }
+
+        if (playerX < keyX + keyWidth &&
+        playerX + playerWidth > keyX &&
+        playerY < keyY + keyHeight &&
+        playerY + playerHeight > keyY) {
+
+            //this needs to be sorted into 4 separate checks
+            touchingkey = true;
+            
+
+        } else {
+
+            touchingkey = false;
+           
+
+        }
+
+        if (playerX < slimeX + slimeWidth &&
+        playerX + playerWidth > slimeX &&
+        playerY < slimeY + slimeHeight &&
+        playerY + playerHeight > slimeY) {
+
+            //this needs to be sorted into 4 separate checks
+            touchingslime = true;
+            
+
+        } else {
+
+            touchingslime = false;
+           
+
+        }
+
+        if (playerX < slime1X + slime1Width &&
+        playerX + playerWidth > slime1X &&
+        playerY < slime1Y + slime1Height &&
+        playerY + playerHeight > slime1Y) {
+
+            //this needs to be sorted into 4 separate checks
+            touching1slime = true;
+            
+
+        } else {
+
+            touching1slime = false;
+           
+
+        }
+
+        if (playerX < slime2X + slime2Width &&
+        playerX + playerWidth > slime2X &&
+        playerY < slime2Y + slime2Height &&
+        playerY + playerHeight > slime2Y) {
+
+            //this needs to be sorted into 4 separate checks
+            touching2slime = true;
+            
+
+        } else {
+
+            touching2slime = false;
+           
+
+        }
+
+        if (slimeX < objectX + objectWidth &&
+        slimeX + slimeWidth > objectX &&
+        slimeY < objectY + objectHeight &&
+        slimeY + slimeHeight > objectY) {
+
+            //this needs to be sorted into 4 separate checks
+            slimetouchingleft = true;
+            slimedirection = 1;
+            //top
+            
+
+        } else {
+
+            slimetouchingleft = false;
+            
+            
+
+        }
+
+        if (slimeX < object2X + object2Width &&
+        slimeX + slimeWidth > object2X &&
+        slimeY < object2Y + object2Height &&
+        slimeY + slimeHeight > object2Y) {
+
+            //this needs to be sorted into 4 separate checks
+            slimetouchingright = true;
+            slimedirection = 2;
+            //bottom
+            
+
+        } else {
+
+            slimetouchingright = false;
+           
+
+        }
+
+        if (slime2X < object3X + object3Width &&
+        slime2X + slime2Width > object3X &&
+        slime2Y < object3Y + object3Height &&
+        slime2Y + slime2Height > object3Y) {
+
+            //this needs to be sorted into 4 separate checks
+            slime2touchingtop = true;
+            slime2direction = 1;
+            //top
+            
+
+        } else {
+
+            slime2touchingtop = false;
+           
+
+        }
+
+        if (playerX < coinX + coinWidth &&
+        playerX + playerWidth > coinX &&
+        playerY < coinY + coinHeight &&
+        playerY + playerHeight > coinY) {
+
+            //this needs to be sorted into 4 separate checks
+            touchingcoin = true;
+            
+
+        } else {
+
+            touchingcoin = false;
+           
+
+        }
+
+        if (playerX < coin1X + coin1Width &&
+        playerX + playerWidth > coin1X &&
+        playerY < coin1Y + coin1Height &&
+        playerY + playerHeight > coin1Y) {
+
+            //this needs to be sorted into 4 separate checks
+            touching1coin = true;
+            
+
+        } else {
+
+            touching1coin = false;
+           
+
+        }
+
+        if (playerX < coin2X + coin2Width &&
+        playerX + playerWidth > coin2X &&
+        playerY < coin2Y + coin2Height &&
+        playerY + playerHeight > coin2Y) {
+
+            //this needs to be sorted into 4 separate checks
+            touching2coin = true;
+            
+
+        } else {
+
+            touching2coin = false;
+           
+
+        }
+
+        if (slime1X < object4X + object4Width &&
+        slime1X + slime1Width > object4X &&
+        slime1Y < object4Y + object4Height &&
+        slime1Y + slime1Height > object4Y) {
+
+            //this needs to be sorted into 4 separate checks
+            slime1touchingbottom = true;
+            //bottom
+            slime1direction = 2;
+            
+
+        } else {
+
+            slime1touchingbottom = false;
+           
+
+        }
+
+        if (slime2X < object4X + object4Width &&
+        slime2X + slime2Width > object4X &&
+        slime2Y < object4Y + object4Height &&
+        slime2Y + slime2Height > object4Y) {
+
+            //this needs to be sorted into 4 separate checks
+            slime2touchingbottom = true;
+            //bottom
+            slime2direction = 2;
+            
+
+        } else {
+
+            slime2touchingbottom = false;
+           
+
+        }
+
+        if (slime1X < objectX + objectWidth &&
+        slime1X + slime1Width > objectX &&
+        slime1Y < objectY + objectHeight &&
+        slime1Y + slime1Height > objectY) {
+
+            //this needs to be sorted into 4 separate checks
+            slime1touchingbottom = true;
+            //bottom
+            slime1direction = 1;
+            
+
+        } else {
+
+            slime1touchingbottom = false;
+           
+
+        }
+
+        
+
+    }
+
+    
+
+draw();
+</script>
+<div id="output"></div>
+
+</body>
+</html>
