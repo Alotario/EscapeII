@@ -11,7 +11,7 @@
     <canvas id="myCanvas" width="960" height="600" style="position:absolute;left:0px;"></canvas>
 
 
-    
+
     <img src="img/player/HUD/hud.jpg" style="position:absolute;width:404px;height:116px;left:0px;top:600px;" id="playerhud">
     <img src="img/player/HUD/down.gif" style="width:72px;height:72px;position:absolute;top:620px;left:164px;">
     <img src="img/player/down.png" width="0" height="0">
@@ -32,6 +32,10 @@
     <img src="img/p1.png" width="0" height="0">
     <img src="img/slime.gif" width="0" height="0">
     <img src="img/healthpack.png" width="0" height="0">
+    <img src="img/hazard.png" width="0" height="0">
+    <img src="img/button.png" width="0" height="0">
+    <img src="img/buttonpressed.png" width="0" height="0">
+    <img src="img/background.png" width="0" height="0"> 
     <p1 id="healthamount" style="position:absolute;top:630px;left:15px;color:red;">25</p1>
 <p2 id="feed" style="position:absolute;color:aquamarine;left:280px;top:640px;"></p2>
 <p3 id="coincount" style="position:absolute;color:aquamarine;left:280px;top:685px;"></p3>
@@ -103,6 +107,16 @@
     var hammerHeight = 32;
     var hammerWidth = 32;
 
+    var buttonX = 750;
+    var buttonY = 250;
+    var buttonHeight = 32;
+    var buttonWidth = 32;
+
+    var button2X = 550;
+    var button2Y = 50;
+    var button2Height = 32;
+    var button2Width = 32;
+
     var rightPressed = false;
     var leftPressed = false;
     var upPressed = false;
@@ -122,11 +136,25 @@
     img.height = playerHeight;
 
     var hammer = new Image();
-    hammer.src = 'img/hammer.png';
+    hammer.src = 'img/button.png';
     hammer.x = hammerX;
     hammer.y = hammerY;
     hammer.width = hammerWidth;
     hammer.height = hammerHeight;
+
+    var button = new Image();
+    button.src = 'img/button.png'
+    button.x = buttonX;
+    button.y = buttonY;
+    button.height = buttonHeight;
+    button.width = buttonWidth;
+
+    var button2 = new Image();
+    button2.src = 'img/button.png'
+    button2.x = button2X;
+    button2.y = button2Y;
+    button2.height = button2Height;
+    button2.width = button2Width;
 
     var object = new Image();
     object.src = "img/p1.png";
@@ -453,7 +481,9 @@
         ctx.drawImage(hazard2, hazard2X, hazard2Y);
         ctx.drawImage(hammer, hammerX, hammerY);
         ctx.drawImage(crate, crateX, crateY);
-        ctx.drawImage(key, keyX, keyY)
+        ctx.drawImage(key, keyX, keyY);
+        ctx.drawImage(button, buttonX, buttonY);
+        ctx.drawImage(button2, button2X, button2Y);
         ctx.drawImage(img, playerX, playerY);
         requestAnimationFrame(draw);
         
@@ -468,6 +498,8 @@
     var health = 25;
     var hashammer = false;
     var hasafekey = false;
+    var pressedbutton1 = false;
+    var pressedbutton2 = false;
 
     var touching1 = false;
     var touching2 = false;
@@ -480,6 +512,8 @@
     var touchingcrate = false;
     var touchingkey = false;
     var touchingsafe = false;
+    var touchingbutton1 = false;
+    var touchingbutton2 = false;
     
 
    function collision() {
@@ -542,18 +576,18 @@
 
         if (touchinghammer == true) {
 
-            hammerX = 1000000;
+            hammer.src = 'img/buttonpressed.png';
             hashammer = true;
 
         }
 
-        if (touchingsafe == true && hasafekey == true) {
+        if (touchingsafe == true && hasafekey == true && hashammer == true && pressedbutton1 == true && pressedbutton2 == true) {
 
             safeX = 100000;
 
         }
 
-        if (touchingcrate == true && striking == true && hashammer == true) {
+        if (touchingcrate == true && striking == true) {
 
             keyX = crateX + 40;
             keyY = crateY - 40;
@@ -565,6 +599,20 @@
 
             keyX = 100000
             hasafekey = true;
+
+        }
+
+        if (touchingbutton1 == true) {
+
+            button.src = 'img/buttonpressed.png';
+            pressedbutton1 = true;
+
+        }
+
+        if (touchingbutton2 == true) {
+
+            button2.src = 'img/buttonpressed.png';
+            pressedbutton2 = true;
 
         }
 
@@ -648,6 +696,38 @@
         } else {
 
             touchinghammer = false;
+           
+
+        }
+
+        if (playerX < buttonX + buttonWidth &&
+        playerX + playerWidth > buttonX &&
+        playerY < buttonY + buttonHeight &&
+        playerY + playerHeight > buttonY) {
+
+            //this needs to be sorted into 4 separate checks
+            touchingbutton1 = true;
+            
+
+        } else {
+
+            touchingbutton1 = false;
+           
+
+        }
+
+        if (playerX < button2X + button2Width &&
+        playerX + playerWidth > button2X &&
+        playerY < button2Y + button2Height &&
+        playerY + playerHeight > button2Y) {
+
+            //this needs to be sorted into 4 separate checks
+            touchingbutton2 = true;
+            
+
+        } else {
+
+            touchingbutton2 = false;
            
 
         }
