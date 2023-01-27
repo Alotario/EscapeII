@@ -117,6 +117,16 @@
     var button2Height = 32;
     var button2Width = 32;
 
+    var slime1X = 390;
+    var slime1Y = 320;
+    var slime1Height = 14;
+    var slime1Width = 28;
+
+    var slime2X = 550;
+    var slime2Y = 320;
+    var slime2Height = 14;
+    var slime2Width = 28;
+
     var rightPressed = false;
     var leftPressed = false;
     var upPressed = false;
@@ -134,6 +144,20 @@
     img.y = playerY;
     img.width = playerWidth;
     img.height = playerHeight;
+
+    var slime1 = new Image();
+    slime1.src = "img/slimebox.png";
+    slime1.x = slime1X;
+    slime1.y = slime1Y;
+    slime1.width = slime1Width;
+    slime1.height = slime1Height;
+
+    var slime2 = new Image();
+    slime2.src = "img/slimebox.png";
+    slime2.x = slime2X;
+    slime2.y = slime2Y;
+    slime2.width = slime2Width;
+    slime2.height = slime2Height;
 
     var hammer = new Image();
     hammer.src = 'img/button.png';
@@ -485,6 +509,8 @@
         ctx.drawImage(button, buttonX, buttonY);
         ctx.drawImage(button2, button2X, button2Y);
         ctx.drawImage(img, playerX, playerY);
+        ctx.drawImage(slime1, slime1X, slime1Y)
+        ctx.drawImage(slime2, slime2X, slime2Y)
         requestAnimationFrame(draw);
         
         requestAnimationFrame(collision);
@@ -514,6 +540,20 @@
     var touchingsafe = false;
     var touchingbutton1 = false;
     var touchingbutton2 = false;
+
+    var slime1touchingleft = false;
+    var slime1touchingbottom = false;
+    var killing1slime = false;
+    var touching1slime = false;
+    var slime1killed = false;
+    var slime1direction = 1;
+
+    var slime2touchingtop = false;
+    var slime2touchingbottom = false;
+    var killing2slime = false;
+    var touching2slime = false;
+    var slime2killed = false;
+    var slime2direction = 1;
     
 
    function collision() {
@@ -532,6 +572,35 @@
     g.innerHTML = Math.round(health);
 
         
+        if (slime1direction == 1 && killing1slime == false) {
+
+        slime1X += 3;
+        slime1Y += 3;
+
+    }
+
+    if (slime1direction == 2 && killing1slime == false) {
+
+        slime1X -= 3;
+        slime1Y -= 3;
+
+    }
+
+    if (slime2direction == 1 && killing2slime == false) {
+
+        slime2X -= 3;
+        slime2Y += 3;
+
+    }
+
+    if (slime2direction == 2 && killing2slime == false) {
+
+        slime2X += 3;
+        slime2Y -= 3;
+
+    }
+
+
 
         if (touching1 == true) {  
 
@@ -613,6 +682,58 @@
 
             button2.src = 'img/buttonpressed.png';
             pressedbutton2 = true;
+
+        }
+
+        if (touching1slime == true) {
+
+            if (striking == true) {
+
+                killing1slime = true;
+                slime1.src = URL = "img/enemydeath.gif";
+                
+                setTimeout(function() {
+
+                    slime1.src = URL = "img/p1.png";
+                    slime1X = 100000000;
+                    slime1killed = true;
+                    
+
+                }, 200)
+
+            } else if  (striking == false) {
+
+                    health -= 1;
+                    g.innerHTML = health;
+                    playerX -= 12;  
+
+            }
+
+        }
+
+        if (touching2slime == true) {
+
+            if (striking == true) {
+
+                killing2slime = true;
+                slime2.src = URL = "img/enemydeath.gif";
+                
+                setTimeout(function() {
+
+                    slime2.src = URL = "img/p1.png";
+                    slime2X = 100000000;
+                    slime2killed = true;
+                    
+
+                }, 200)
+
+            } else if  (striking == false) {
+
+                    health -= 1;
+                    g.innerHTML = health;
+                    playerX -= 12;  
+
+            }
 
         }
 
@@ -744,6 +865,110 @@
         } else {
 
             touchingcrate = false;
+           
+
+        }
+
+        if (playerX < slime1X + slime1Width &&
+        playerX + playerWidth > slime1X &&
+        playerY < slime1Y + slime1Height &&
+        playerY + playerHeight > slime1Y) {
+
+            //this needs to be sorted into 4 separate checks
+            touching1slime = true;
+            
+
+        } else {
+
+            touching1slime = false;
+           
+
+        }
+
+        if (slime1X < object4X + object4Width &&
+        slime1X + slime1Width > object4X &&
+        slime1Y < object4Y + object4Height &&
+        slime1Y + slime1Height > object4Y) {
+
+            //this needs to be sorted into 4 separate checks
+            slime1touchingbottom = true;
+            //bottom
+            slime1direction = 2;
+            
+
+        } else {
+
+            slime1touchingbottom = false;
+           
+
+        }
+
+        if (slime2X < object4X + object4Width &&
+        slime2X + slime2Width > object4X &&
+        slime2Y < object4Y + object4Height &&
+        slime2Y + slime2Height > object4Y) {
+
+            //this needs to be sorted into 4 separate checks
+            slime2touchingbottom = true;
+            //bottom
+            slime2direction = 2;
+            
+
+        } else {
+
+            slime2touchingbottom = false;
+           
+
+        }
+
+        if (slime2X < object3X + object3Width &&
+        slime2X + slime2Width > object3X &&
+        slime2Y < object3Y + object3Height &&
+        slime2Y + slime2Height > object3Y) {
+
+            //this needs to be sorted into 4 separate checks
+            slime2touchingtop = true;
+            slime2direction = 1;
+            //top
+            
+
+        } else {
+
+            slime2touchingtop = false;
+           
+
+        }
+
+        if (slime1X < object3X + object3Width &&
+        slime1X + slime1Width > object3X &&
+        slime1Y < object3Y + object3Height &&
+        slime1Y + slime1Height > object3Y) {
+
+            //this needs to be sorted into 4 separate checks
+            slime1touchingbottom = true;
+            //bottom
+            slime1direction = 1;
+            
+
+        } else {
+
+            slime1touchingbottom = false;
+           
+
+        }
+
+        if (playerX < slime2X + slime2Width &&
+        playerX + playerWidth > slime2X &&
+        playerY < slime2Y + slime2Height &&
+        playerY + playerHeight > slime2Y) {
+
+            //this needs to be sorted into 4 separate checks
+            touching2slime = true;
+            
+
+        } else {
+
+            touching2slime = false;
            
 
         }
