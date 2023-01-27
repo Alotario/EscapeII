@@ -5,5 +5,5 @@ A new installation of the Escape! series, Escape II will be a complete overhaul 
 
 Escape II has a planned release window of late 2023 or early 2024. This game is a passion-based project, so it will take quite a bit of time to come out.
 
-<img src="blob:chrome-untrusted://media-app/43232ef6-669a-473b-a8a4-317c05ccb65b" alt="Dobel Studios Logo.jpg"/>![image](https://user-images.githubusercontent.com/95440368/215163469-54b533a3-4fe8-45da-9573-8a02a5228d8a.png)
+<img src="blob:chrome-untrusted://media-app/43232ef6-669a-473b-a8a4-317c05ccb65b"/>![image](https://user-images.githubusercontent.com/95440368/215163469-54b533a3-4fe8-45da-9573-8a02a5228d8a.png)
 DOBEL STUDIOS
