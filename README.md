@@ -11,6 +11,6 @@ Utilizing our new Topside Engine, we plan to make Escape II the biggest, most ov
 
 Escape II has a planned release window of late 2023 or early 2024. This game is a passion-based project, so it will take quite a bit of time to come out.
 
-<img src="blob:chrome-untrusted://media-app/43232ef6-669a-473b-a8a4-317c05ccb65b"/>![image](https://user-images.githubusercontent.com/95440368/215163469-54b533a3-4fe8-45da-9573-8a02a5228d8a.png)
-<br>
+![image](https://user-images.githubusercontent.com/95440368/215272297-eb8ae979-8f5c-4eae-b542-0d31cb6a9405.png)
+
 DOBEL STUDIOS 2023
