@@ -1,10 +1,11 @@
 ART TO MAKE:
 
-    -none yet
+    -background-blended enemy art
+    -the two other background variations
 
 STUFF TO CODE:
 
-    -lv1
-        -finish logic for items
-        -put in the slimes (remember diagonals go 2 speed, straight goes 3 speed) and write their logic
+    -lv2
+        -finish safe/key logic
         -put in coins
+        -add in pickups feed logic
