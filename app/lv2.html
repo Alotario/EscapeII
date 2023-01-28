@@ -91,6 +91,11 @@
     var keyY = 12121
     var keyWidth = 32
     var keyHeight = 32
+    
+    var fkeyX = 12122
+    var fkeyY = 12121
+    var fkeyWidth = 32
+    var fkeyHeight = 32
 
     var hazard1X = 100
     var hazard1Y = 300
@@ -173,6 +178,7 @@
     button.height = buttonHeight;
     button.width = buttonWidth;
 
+    //THIS IS THE THIRD BUTTON. the hammer variables were repurposed to make a button, i just don't feel like renaming them
     var button2 = new Image();
     button2.src = 'img/button.png'
     button2.x = button2X;
@@ -235,6 +241,13 @@
     key.y = keyY;
     key.width = keyWidth;
     key.height = keyHeight;
+    
+    var fkey = new Image();
+    fkey.src = "img/miniobjectivekey.png";
+    fkey.x = fkeyX;
+    fkey.y = fkeyY;
+    fkey.width = fkeyWidth;
+    fkey.height = fkeyHeight;
     
     var hazard1 = new Image();
     hazard1.src = "img/hazard.png"
@@ -506,6 +519,7 @@
         ctx.drawImage(hammer, hammerX, hammerY);
         ctx.drawImage(crate, crateX, crateY);
         ctx.drawImage(key, keyX, keyY);
+        ctx.drawImage(fkey, fkeyX, fkeyY);
         ctx.drawImage(button, buttonX, buttonY);
         ctx.drawImage(button2, button2X, button2Y);
         ctx.drawImage(img, playerX, playerY);
@@ -524,6 +538,7 @@
     var health = 25;
     var hashammer = false;
     var hasafekey = false;
+    var hasfinalkey = false;
     var pressedbutton1 = false;
     var pressedbutton2 = false;
 
@@ -540,6 +555,7 @@
     var touchingsafe = false;
     var touchingbutton1 = false;
     var touchingbutton2 = false;
+    var touchingfkey = false;
 
     var slime1touchingleft = false;
     var slime1touchingbottom = false;
@@ -628,9 +644,9 @@
 
         if (touchingdoor == true) {
 
-            if (hascoin == true && slimekilled == true) {
+            if (hasfinalkey == true) {
 
-                window.location = URL = "test.html"
+                window.location = URL = "../index.html"
 
             } else {
 
@@ -653,6 +669,7 @@
         if (touchingsafe == true && hasafekey == true && hashammer == true && pressedbutton1 == true && pressedbutton2 == true) {
 
             safeX = 100000;
+            fkeyX = playerX + 45
 
         }
 
@@ -710,6 +727,7 @@
             }
 
         }
+       
 
         if (touching2slime == true) {
 
@@ -736,6 +754,13 @@
             }
 
         }
+       
+       if (touchingfkey == true) {
+        
+           fkeyX = 10000
+           hasfinalkey = true;
+           
+       }
 
     if (playerX < objectX + objectWidth &&
         playerX + playerWidth > objectX &&
@@ -1001,6 +1026,22 @@
         } else {
 
             touchingkey = false;
+           
+
+        }
+       
+       if (playerX < fkeyX + fkeyWidth &&
+        playerX + playerWidth > fkeyX &&
+        playerY < fkeyY + fkeyHeight &&
+        playerY + playerHeight > fkeyY) {
+
+            //this needs to be sorted into 4 separate checks
+            touchingfkey = true;
+            
+
+        } else {
+
+            touchingfkey = false;
            
 
         }
