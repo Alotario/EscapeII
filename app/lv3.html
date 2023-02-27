@@ -31,6 +31,7 @@
 <img src="img/p1.png" width="0" height="0">
 <img src="img/slime.gif" width="0" height="0">
 <img src="img/healthpack.png" width="0" height="0">
+<img src="img/hazard1-lv3.jpg" width="0" height="0">
 <p1 id="healthamount" style="position:absolute;top:630px;left:15px;color:red;">25</p1>
 <p2 id="feed" style="position:absolute;color:aquamarine;left:280px;top:640px;"></p2>
 <p3 id="coincount" style="position:absolute;color:aquamarine;left:280px;top:685px;"></p3>
@@ -76,18 +77,18 @@
     //ctx.fillRect(0, 300, 100, 300)//hazard2
     //ctx.fillRect(100, 300, 70, 175)//hazard3
 
-    var hazard1X = 250
-    var hazard1Y = 300
+    var hazard1X = 230
+    var hazard1Y = 270
     var hazard1Width = 700
     var hazard1Height = 300
 
-    var hazard2X = 0
-    var hazard2Y = 300
+    var hazard2X = 30
+    var hazard2Y = 270
     var hazard2Width = 100
     var hazard2Height = 300
 
-    var hazard3X = 100
-    var hazard3Y = 300
+    var hazard3X = 130
+    var hazard3Y = 270
     var hazard3Width = 70
     var hazard3Height = 175
 
@@ -167,6 +168,27 @@
     slime2.y = slime2Y;
     slime2.width = slime2Width;
     slime2.height = slime2Height;
+
+    var hazard1 = new Image();
+    hazard1.src = "img/hazard1-lv3.jpg"
+    hazard1.x = hazard1X;
+    hazard1.y = hazard1Y;
+    hazard1.width = hazard1Width;
+    hazard1.height = hazard1Height;
+
+    var hazard2 = new Image();
+    hazard2.src = "img/hazard2-lv3.jpg"
+    hazard2.x = hazard2X;
+    hazard2.y = hazard2Y;
+    hazard2.width = hazard2Width;
+    hazard2.height = hazard2Height;
+
+    var hazard3 = new Image();
+    hazard3.src = "img/hazard3-lv3.jpg"
+    hazard3.x = hazard3X;
+    hazard3.y = hazard3Y;
+    hazard3.width = hazard3Width;
+    hazard3.height = hazard3Height;
 
 
     // keyboard handling
@@ -351,9 +373,9 @@
         ctx.fillRect(object2X, object2Y, object2Width, object2Height)
         ctx.fillRect(object3X, object3Y, object3Width, object3Height)
         ctx.fillRect(object4X, object4Y, object4Width, object4Height)
-        ctx.fillRect(250, 300, 700, 300)//hazard1
-        ctx.fillRect(0, 300, 100, 300)//hazard2
-        ctx.fillRect(100, 300, 70, 175)//hazard3
+        //ctx.fillRect(250, 300, 700, 300)//hazard1
+        //ctx.fillRect(0, 300, 100, 300)//hazard2
+        //ctx.fillRect(100, 300, 70, 175)//hazard3
         
         // more keyboard handlings
         if(rightPressed) {
@@ -410,7 +432,6 @@
 
         
         //objects drawn
-        ctx.drawImage(img, playerX, playerY);
         ctx.drawImage(object, objectX, objectY);
         ctx.drawImage(object2, object2X, object2Y);
         ctx.drawImage(object3, object3X, object3Y);
@@ -418,6 +439,10 @@
         ctx.drawImage(slime, slimeX, slimeY)
         ctx.drawImage(slime2, slime2X, slime2Y)
         ctx.drawImage(door, doorX, doorY);
+        ctx.drawImage(hazard1, hazard1X, hazard1Y)
+        ctx.drawImage(hazard3, hazard3X, hazard3Y)
+        ctx.drawImage(hazard2, hazard2X, hazard2Y)
+        ctx.drawImage(img, playerX, playerY);
         requestAnimationFrame(draw);
         
         requestAnimationFrame(collision);
@@ -438,6 +463,7 @@
     var touchingslime2 = false;
     var touchinghazard1 = false;
     var touchinghazard2 = false;
+    var touchinghazard3 = false;
 
     var slime1tbottom = false;
     var slime1dir = 2;
@@ -496,6 +522,24 @@
         }
 
         if (touchinghazard1 == true) {
+
+            img.src = "img/hazardsprite.png"
+            health -= 0.1
+            g.innerHTML = Math.round(health)
+            img.src = "img/hazardsprite.png"
+
+        }
+
+        if (touchinghazard2 == true) {
+
+            img.src = "img/hazardsprite.png"
+            health -= 0.1
+            g.innerHTML = Math.round(health)
+            img.src = "img/hazardsprite.png"
+
+        }
+
+        if (touchinghazard3 == true) {
 
             img.src = "img/hazardsprite.png"
             health -= 0.1
@@ -728,12 +772,13 @@
         playerY + playerHeight > slime2Y) {
 
             //this needs to be sorted into 4 separate checks
-            touching2slime = true;
+            touchingslime2 = true;
             //left
 
         } else {
 
-            touching2slime = false;
+            touchingslime2 = false;
+            
             
 
         }
@@ -789,18 +834,34 @@
 
         }
 
-        if (playerX < hazard1X + hazard1Width &&
-        playerX + playerWidth > hazard1X &&
-        playerY < hazard1Y + hazard1Height &&
-        playerY + playerHeight > hazard1Y) {
+        if (playerX < hazard2X + hazard2Width &&
+        playerX + playerWidth > hazard2X &&
+        playerY < hazard2Y + hazard2Height &&
+        playerY + playerHeight > hazard2Y) {
 
             //this needs to be sorted into 4 separate checks
-            touchinghazard1 = true;
+            touchinghazard2 = true;
             
 
         } else {
 
-            touchinghazard1 = false;
+            touchinghazard2 = false;
+           
+
+        }
+
+        if (playerX < hazard3X + hazard3Width &&
+        playerX + playerWidth > hazard3X &&
+        playerY < hazard3Y + hazard3Height &&
+        playerY + playerHeight > hazard3Y) {
+
+            //this needs to be sorted into 4 separate checks
+            touchinghazard3 = true;
+            
+
+        } else {
+
+            touchinghazard3 = false;
            
 
         }
