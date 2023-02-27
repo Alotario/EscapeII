@@ -1,11 +1,2 @@
-ART TO MAKE:
-
-    -background-blended enemy art
-    -the two other background variations
-
-STUFF TO CODE:
-
-    -lv2
-        -finish safe/key logic
-        -put in coins
-        -add in pickups feed logic
+TODO:
+    -create short trailer
